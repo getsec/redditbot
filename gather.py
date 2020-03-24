@@ -3,11 +3,14 @@ import requests
 import shutil
 
 def download_image(url ,title):
-    r = requests.get(url, stream=True)
-    if r.status_code == 200:
-        with open(f"static/{title}.jpg", 'wb') as f:
-            r.raw.decode_content = True
-            shutil.copyfileobj(r.raw, f) 
+    try:
+        r = requests.get(url, stream=True)
+        if r.status_code == 200:
+            with open(f"static/{title}.jpg", 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+    except:
+        pass
 
 secret = "1M9LuTEHCPzucVWbE8KY0Y6aXgI"
 app_id = "J01TWV-gcgcCKQ"
@@ -34,7 +37,7 @@ subreddit_list = [
 
 for subreddit in subreddit_list:
     sr = reddit.subreddit(subreddit) 
-    posts = sr.hot(limit=150)
+    posts = sr.hot(limit=500)
     for post in posts:
         url = post.url
         title = post.title.rstrip("'").replace("/", ".").rstrip("'").replace(' ', '_').replace('.','-').replace('?','')
